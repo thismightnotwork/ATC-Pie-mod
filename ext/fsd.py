@@ -26,6 +26,9 @@ from datetime import datetime, timedelta, timezone
 from PyQt5.QtCore import QObject, pyqtSignal
 from PyQt5.QtNetwork import QAbstractSocket, QTcpSocket
 
+
+import hashlib
+import os
 from ai.aircraft import pitch_factor
 
 from base.acft import Aircraft, Xpdr
@@ -46,6 +49,11 @@ from session.env import env
 protocol_version = '9' # expected by https://github.com/kuroneko/fsd commit bc7d43b6 (latest available in April 2020)
 init_connection_timeout = 3000 # ms
 min_dist_for_hdg_update = m2NM * .1
+
+# VATSIM Auth credentials (EuroScope identity)
+VATSIM_CLIENT_ID = 27095  # 0x69b7
+VATSIM_CLIENT_KEY = '3518a62c421937ffa46ac3316957da43'
+SYS_UID = format(int(hashlib.md5(os.urandom(8)).hexdigest()[:8], 16), '08x')
 max_time_for_pos_update = timedelta(seconds=5)
 min_height_for_neg_pitch = 100 # ft
 speed_estimation_factor_airborne = .9  # underestimate speed to limit backtrack effects on real update...
@@ -66,11 +74,13 @@ recv_prefixes_fmt = {
 	'#DP': 2,  # Remove a pilot client
 	'#TM': 3,  # "Text message" (last field might contain ':')
 	'$AR': 4,  # METAR received
+	  '$DI': 4,  # Server identification + challenge
 	'$CQ': 3,  # Request (last field might contain ':')
 	'$CR': 4,  # Answer to request (last field might contain ':')
 	'$ER': 5,  # Error message from server (last field might contain ':')
 	'$FP': 17, # FPL filed
 	'$HO': 3,  # Handover
+	  '$ZC': 3,  # Session challenge
 	'%':   8,  # ATC position update
 	'@':   10  # Pilot position update
 }
@@ -279,6 +289,20 @@ class FsdConnection(QObject):
 		QObject.__init__(self, parent)
 		self.socket = None
 		self.strinbuf = ''
+
+	  def _vatsim_auth_response(self, challenge):
+    """Compute VATSIM MD5 challenge response."""
+    key = VATSIM_CLIENT_KEY
+    combined = challenge + key
+    return hashlib.md5(combined.encode('ascii')).hexdigest()
+
+  def _send_id_packet(self, callsign, cid, server_callsign, initial_challenge):
+    """Send $ID identification/auth packet."""
+    response = self._vatsim_auth_response(initial_challenge)
+    packet = '$ID{cs}:{svr}:{cid}:6:{ckey}:{sysuid}:{resp}\r\n'.format(
+        cs=callsign, svr=server_callsign, cid=cid,
+        ckey=VATSIM_CLIENT_KEY, sysuid=SYS_UID, resp=response)
+    self.socket.write(packet.encode('ascii'))
 	
 	def initOK(self):
 		self.socket = QTcpSocket(self)
@@ -287,6 +311,9 @@ class FsdConnection(QObject):
 		self.socket.connectToHost(settings.FSD_server_host, settings.FSD_server_port)
 		if self.socket.waitForConnected(init_connection_timeout):
 			coords = env.radarPos()
+			      # Store callsign and CID for use in auth handlers
+      self._connect_callsign = settings.my_callsign
+      self._connect_cid = settings.FSD_cid
 			self.sendLinePacket('#AA' + settings.my_callsign, 'SERVER', settings.MP_social_name,
 					settings.FSD_cid, settings.FSD_password, str(settings.FSD_rating), protocol_version,
 					'1', '0', '%f' % coords.lat, '%f' % coords.lon, '100')
@@ -326,7 +353,31 @@ class FsdConnection(QObject):
 				self.cmdReceived.emit(cmd, fsd_line[len(cmd):].split(':', maxsplit=(reqlen - 1)))
 			except StopIteration: # Unrecognised command
 				print('Unhandled packet:', fsd_line, file=stderr)
-	
+
+
+      # Handle VATSIM $DI (server identification / initial challenge)
+      if cmd == '$DI':
+        # fields: $DIserver:CLIENT:version:challenge
+        fields = fsd_line[len(cmd):].split(':', maxsplit=(reqlen - 1))
+        server_cs = fsd_line[3:fsd_line.index(':')]
+        initial_challenge = fields[3] if len(fields) > 3 else ''
+        # callsign and CID are needed; read from pending connect info
+        if hasattr(self, '_connect_callsign') and self._connect_callsign:
+          self._send_id_packet(
+              self._connect_callsign, self._connect_cid,
+              server_cs, initial_challenge)
+        continue
+
+      # Handle VATSIM $ZC (session challenge)
+      if cmd == '$ZC':
+        # fields: $ZCserver:client:challenge
+        fields = fsd_line[len(cmd):].split(':', maxsplit=(reqlen - 1))
+        challenge = fields[2] if len(fields) > 2 else ''
+        response = self._vatsim_auth_response(challenge)
+        reply = '$ZR{cs}:{svr}:{resp}\r\n'.format(
+            cs=self._connect_callsign, svr=fields[0], resp=response)
+        self.socket.write(reply.encode('ascii'))
+        continue
 	
 	## Higher-level sending methods
 	
