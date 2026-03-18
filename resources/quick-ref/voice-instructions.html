@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+	<meta name="qrichtext" content="1" />
+	<style type="text/css">p, li { white-space: pre-wrap; }</style>
+</head>
+
+<body>
+
+<h1>Voice instructions</h1>
+
+<h2>Supported instructions</h2>
+
+<p><strong>All instructions</strong> normally available through the panel or mouse gestures when voice recognition is turned off can be recognised through speech with the appropriate phraseology, <strong>except</strong>:</p>
+<ul>
+	<li>departure clearances;</li>
+	<li>ground taxi instructions;</li>
+	<li>complex navigation instructions such as "intercept the 120&deg; radial from ..." or "proceed ..." with a full route specification.</li>
+</ul>
+
+For those, you must use the mouse interface.
+
+
+<h2>Examples</h2>
+
+<p>The following examples are recognised by the system:</p>
+<ul>
+    <li>"Speedbird fifteen seventy-two turn left heading three two zero"</li>
+    <li>"Koreanair one niner tree seven descend and maintain one one eleven thousand"</li>
+    <li>"November nine one Lima proceed direct Mike Lima Alpha expect runway zero six left"</li>
+    <li>"Foxtrot Uniform Tango cleared visual approach runway one three"</li>
+    <li>"Springbok two zero five runway three cleared to land wind three two zero at six knots"</li>
+</ul>
+
+
+<h2>Tips to maximise accuracy</h2>
+<ul>
+    <li>Do not break, backtrack or silence too much between your words. Try to have your message flow from start to end.</li>
+    <li>Take special care enunciating the callsign. Abbreviated tail numbers for non-commercial flights are OK as long as at they end with at least two of the last letters or numbers.</li>
+    <li>The grammar allows for some laxity in the phraseology, but the more accurate your instructions, the safer your results.</li>
+    <li>Do not set your microphone volume too low.</li>
+</ul>
+
+
+<h2>Instruction grammar</h2>
+
+<p>Below is a grammar for a relevant subset of the recognised instruction language, in EBNF style. The actual grammar file is <code>resources/speech-recog/instr.jsgf</code>, in JSGF format.</p>
+
+<p><code>
+<b>FULL_MESSAGE</b> ::= <em>callsign</em> <em>instruction</em>+<br>
+<br>
+<em><b>instruction</b></em> ::=<br>
+| "turn" ["left" | "right"] "heading" <em>heading</em><br>
+| ("climb" | "descend") ["and maintain"] (<em>FL</em> | <em>altitude</em>)<br>
+| "speed" (<em>speed</em> | "your discretion")<br>
+| "expect" [<em>approach</em>] (<em>helipad</em> | <em>runway</em>)<br>
+| "intercept localiser" [<em>runway</em>]<br>
+| "cleared" ("ILS" | "visual") "approach" [<em>runway</em>]<br>
+| "make straight-in approach" [<em>helipad</em> | <em>runway</em>]<br>
+| <em>runway</em> "line-up and wait"<br>
+| <em>runway</em> "cleared for take-off" [<em>wind_info</em>]<br>
+| <em>runway</em> "cleared to land" [<em>wind_info</em>]<br>
+| "cancel approach" | "go around"<br>
+| "proceed direct" <em>navpoint</em><br>
+| "hold at" <em>navpoint</em><br>
+| "squawk" <em>xpdr_code</em><br>
+| "contact" <em>atc_position</em> ["bye bye"]<br>
+| "say intentions"<br>
+<br>
+<em><b>approach</b></em> ::= "ILS" | "visual" | "straight-in"
+<br>
+<em><b>atc_position</b></em> ::= "ramp" | "ground" | "tower" | "departure" | "approach" | "centre"
+</code></p>
+
+<p><code><em><b>callsign</b></em></code> is either a tail number or a commercial flight number using the airline callsign specified in <code>CONFIG/phon/airline-callsigns.phon</code>.</p>
+
+<p><code><em><b>navpoint</b></em></code> can be spelt with the aeronautical alphabet or named as specified for the location; see <code>CONFIG/phon/Notice</code>.</p>
+
+</body>
+</html>
+

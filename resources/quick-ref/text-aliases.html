@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+	<meta name="qrichtext" content="1" />
+	<style type="text/css">p, li { white-space: pre-wrap; }</style>
+</head>
+
+<body>
+
+<h1>Text aliases</h1>
+
+<h2>Predefined aliases</h2>
+
+<p>Session-dependant:</p>
+<ul>
+	<li>$ad	Long name of the base airfield (AD mode only).</li>
+	<li>$atis	Last recorded ATIS letter.</li>
+	<li>$decl	Local magnetic declination.</li>
+	<li>$elev	Base airfield elevation in feet (AD mode only).</li>
+	<li>$frq	Current publicised frequency.</li>
+	<li>$helipads	List of active helicopter pads (AD mode only).</li>
+	<li>$icao	Current location code (AD or CTR).</li>
+	<li>$me	Your radio callsign (location setting), or text callsign if none set.</li>
+	<li>$metar	Last METAR string.</li>
+	<li>$qfe	Current ground pressure at airfield in hPa (AD mode only).</li>
+	<li>$qnh	Current sea level pressure in hPa.</li>
+	<li>$qnhg	Current sea level pressure in inches of mercury.</li>
+	<li>$runways	Summary of DEP/LDG use of runways (AD mode only).</li>
+	<li>$rwyarr	List of runways selected for arrivals (AD mode only).</li>
+	<li>$rwydep	List of runways selected for departures (AD mode only).</li>
+	<li>$ta	Transition altitude.</li>
+	<li>$tl	Lowest flight level, given current QNH and TA.</li>
+	<li>$utc	Current universal coordinated time in hhmmZ format.</li>
+	<li>$vis	Reading of METAR prevailing visibility.</li>
+	<li>$wind	Reading of METAR wind.</li>
+</ul>
+
+<p>Selection-dependant:</p>
+<ul>
+	<li>$cruise	Cruise altitude/FL written on the strip or linked FPL.</li>
+	<li>$dest	Destination written on the strip or linked FPL.</li>
+	<li>$dist	Distance between radar contact and airfield (AD mode only).</li>
+	<li>$nseq	Sequence number on rack.</li>
+	<li>$qdm	Bearing to airfield from radar contact (AD mode only).</li>
+	<li>$rack	Name of rack on which strip is sequenced.</li>
+	<li>$route	Contents of the strip or linked FPL route field.</li>
+	<li>$rwy	Runway for which strip is boxed (AD mode only).</li>
+	<li>$sq	Assigned transponder code.</li>
+	<li>$valt	Vectored altitude or FL.</li>
+	<li>$vhdg	Vectored heading.</li>
+	<li>$vspd	Vectored speed.</li>
+	<li>$wpnext	Next waypoint on route.</li>
+	<li>$wpsid	First enroute waypoint if &quot;SID&quot; appears in first leg spec.</li>
+	<li>$wpstar	Last enroute waypoint if &quot;STAR&quot; appears in last leg spec.</li>
+</ul>
+
+<h2>Custom aliases</h2>
+
+<p>If not in the list of predefined text aliases above, any &quot;$alias&quot; word in a text message will trigger a search for a line starting with &quot;alias=&quot; in the following texts, in order:</p>
+<ul>
+	<li>general notes;</li>
+	<li>local notes;</li>
+	<li>selected strip comments.</li>
+</ul>
+<p>The remainder of the first line found is substituted in place of the alias. This allows to define custom text aliases on all possible levels: user/general, location (AD or CTR), and selection. If the substitution is unsuccessful, ATC-pie will open an edit box so that you can review your message before sending it.</p>
+
+</body>
+</html>
+

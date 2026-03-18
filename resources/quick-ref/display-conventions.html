@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+	<meta name="qrichtext" content="1" />
+	<style type="text/css">p, li { white-space: pre-wrap; }</style>
+</head>
+
+<body>
+
+<h1>Display conventions</h1>
+
+<p>NB: Colours are customisable; mentioned here are the default colours.</p>
+
+<h2>Strips</h2>
+
+<p>First text line:</p>
+<ul>
+	<li>&quot;+&quot; (teaching sessions): strip never yet sent to connected student</li>
+	<li>&quot;&#x26A1;&quot; (if CPDLC on strips): connected data link (bracketed if expecting acknowledgement/answer or problem to resolve, with &quot;&gt;&gt; ...&quot; if transferring)</li>
+	<li>boldfaced: callsign, or &quot;?&quot; if unknown</li>
+	<li>&quot;*&quot; suffix: comment filled in strip details</li>
+	<li>after callsign: aircraft type</li>
+	<li>after &quot;/&quot;: wake turbulence category</li>
+	<li>&quot;sq=...&quot; (when strip not linked or XPDR conflict): assigned transponder code</li>
+</ul>
+
+<p>Possible warnings on first line:</p>
+<ul>
+	<li>&quot;!!dup&quot;: callsign appears on another strip (duplicate)</li>
+	<li>&quot;!!XPDR&quot;: transponder conflicts</li>
+	<li>&quot;!!CPDLC&quot;: problem to resolve in data link dialogue</li>
+	<li>&quot;!!vect&quot;: unfollowed vectors (see <em>courses and assignments</em>)</li>
+	<li>&quot;!!route&quot;: unfollowed route (when no heading is assigned)</li>
+</ul>
+
+<p>Second text line:</p>
+<ul>
+	<li>enclosed in &quot;[]&quot;: approach spacing hint (if activated; see below)</li>
+	<li>available route (if linked: remainder only), or destination</li>
+</ul>
+
+<p>Approach spacing hints, in square brackets on second line:</p>
+<ul>
+	<li>timing hint: estimated touchdown time difference with preceeding traffic in rack sequence, assuming a path via its position</li>
+	<li>ground speed comparison char: &quot;&uarr;&quot; faster than traffic ahead (getting closer); &quot;&darr;&quot; slower</li>
+	<li>&quot;!!seq&quot;: negative spacing (overtaking traffic ahead), consider resequencing</li>
+	<li>&quot;opt. <em>XXX</em>/<em>YYY</em>&quot;: sequence optimisation suggestion (combined time gain <em>XXX</em> if moved up one position, but time loss <em>YYY</em> for preceeding traffic)</li>
+</ul>
+
+<p>Background colour:</p>
+<ul>
+	<li>white: no radar link</li>
+	<li>blue: radar identified by assistant</li>
+	<li>green: linked to radar contact, without conflicts</li>
+	<li>yellow: linked to radar contact, with unfollowed vector/route assignments or unanswered CPDLC message</li>
+	<li>red: linked to radar contact, with XPDR conflicts or problem detected in CPDLC dialogue</li>
+</ul>
+
+<p>Misc.:</p>
+<ul>
+	<li>bottom border: flight rules (solid = IFR; striped = VFR)</li>
+	<li>triangle mark in top right-hand corner: a flight plan is linked</li>
+	<li>triangle mark in bottom right-hand corner: a departure clearance is recorded</li>
+	<li>handshake icon, with &quot;<em>XXX</em> &gt;&gt;&quot; on first text line: strip received from <em>XXX</em> (click to acknowledge)</li>
+	<li>printer icon: strip automatically printed</li>
+	<li>recycle icon: strip recovered from failed transfer or recalled from deleted/sent strips</li>
+</ul>
+
+<h2>Radar contacts</h2>
+
+<p>Target shape:</p>
+<ul>
+	<li>regular shape: square if transponder contact, circle if primary target</li>
+	<li>regular fill: solid if contact is linked to a strip (you control it)</li>
+	<li>&quot;X&quot;: ignored contact</li>
+	<li>&quot;?&quot;: contact was invisible on last radar sweep</li>
+	<li>&quot;+&quot;: unspawned teacher aircraft</li>
+	<li>&quot;=&quot;: frozen teacher aircraft</li>
+	<li>numerical value: sequence number on rack (if option selected)</li>
+</ul>
+
+<p>Indicators:</p>
+<ul>
+	<li>white circle: selected</li>
+	<li>triple blue box: radar identification</li>
+	<li>red diamond: squawking ident or emergency code</li>
+</ul>
+
+<h2>Radar tags</h2>
+
+<p>Top text line (shown if contact is selected, linked or hovered):</p>
+<ul>
+	<li>&quot;#&quot;: radar contact manually flagged</li>
+	<li>&quot;&#x26A1;&quot;: CPDLC connected, in square brackets if expecting acknowledgement/answer or problem to resolve</li>
+	<li>callsign, or &quot;?&quot; if unknown</li>
+	<li>&quot;!!ident&quot; if squawking ident</li>
+	<li>aircraft type designator if known</li>
+	<li>WTC if available and on this line (after &quot;/&quot;)</li>
+</ul>
+
+<p>FL/speed line (middle or bottom according to chosen setting):</p>
+<ul>
+	<li>reported altitude if any, &quot;GND&quot; if squawking ground bit, or &quot;alt?&quot; (*)</li>
+	<li>vario char: &quot;&#x2197;&quot; climbing, &quot;&#x2198;&quot; descending, &quot;=&quot; neither, &quot;-&quot; not available (*)</li>
+	<li>assigned alt. if any (or &quot;-&quot; if none and no radar mode C capability)</li>
+	<li>ground speed or Mach number</li>
+	<li>WTC if available and on this line (after &quot;/&quot;)</li>
+</ul>
+
+<p>(*) not shown if no radar mode C capability</p>
+
+<p>Code/waypoint line (one case applies below):</p>
+<ul>
+	<li>contact unlinked, squawking emergency or code mismatching assignment: received transponder code; &quot;!!EMG&quot; if emergency</li>
+	<li>contact on a standard departure/arrival procedure route leg: &quot;SID&quot; or &quot;STAR&quot; as appropriate; exit or entry point, respectively</li>
+	<li>otherwise, when available: next waypoint on route, or destination; geodesic heading to it</li>
+</ul>
+
+<p>Style:</p>
+<ul>
+	<li>outline: dashed if contact cheated individually</li>
+	<li>colour: yellow if flagged, follows linked strip rack colour if set</li>
+</ul>
+
+<h2>Aircraft courses and assignments</h2>
+
+Course line:
+<ul>
+	<li>style: solid if a heading is assigned, dotted otherwise</li>
+	<li>colour: red if flying off assigned heading, grey otherwise</li>
+</ul>
+
+Altitude arc, drawn if alt./FL different from assignment:
+<ul>
+	<li>solid arc shows point at which the assignment will be reached</li>
+	<li>dotted arc means point is beyond arc</li>
+</ul>
+
+Speed marks:
+<ul>
+	<li>position: each mark shows the distance flown in 1 minute at assigned speed, or current speed if none assigned</li>
+	<li>colour: grey if reported IAS (estimated if none) matches the vector or if no speed is assigned, red otherwise</li>
+	<li>shape: chevrons point to either accelerate or decelerate to reach assignment</li>
+</ul>
+
+Dashed route line:
+<ul>
+	<li>aircraft selected when route correctly entered: green if route should be followed, dark yellow if overridden by a heading vector</li>
+	<li>&quot;show all route assignments&quot; switched on: follows rack colour</li>
+	<li>replaced with anticipated path if a conflict is detected (separation circles drawn): red if vectors intersect, brown if it depends on an aircraft's altitude</li>
+</ul>
+
+<h2>Runways in depicted airports</h2>
+
+<p>Fill:</p>
+<ul>
+	<li>solid: paved surface (e.g. concrete)</li>
+	<li>outlined only: unpaved (grass, sand, etc.)</li>
+</ul>
+
+<p>Occupation highlighting:</p>
+<ul>
+	<li>red: box empty and traffic detected, or runway reserved and more than one detected (runway incursion)</li>
+	<li>yellow: runway box filled and no more than one traffic detected on the runway (reserved)</li>
+</ul>
+
+<p>Final approach guides:</p>
+<ul>
+	<li>interception cone: extends out to LOC range</li>
+	<li>course guide line colour: blue if runway has a localiser, purple otherwise</li>
+	<li>grouped altitude marks: the sum in each group indicates altitude AMSL along the specified FPA (solid diamond = 5,000 ft, straight mark = 1,000 ft); blue within GS range if present, purple beyond</li>
+	<li>dashed, dot-dashed and dotted markers across course guide: outer, middle and inner ILS marker positions (mnemonic is audio signal pattern)</li>
+</ul>
+
+<h2>Flight plans</h2>
+
+<p>Status colours:</p>
+<ul>
+	<li>black: filed online, not yet opened</li>
+	<li>grey: outdated (never opened)</li>
+	<li>green: open without warnings</li>
+	<li>yellow: open with unknown time of arrival</li>
+	<li>red: open and past estimated time of arrival</li>
+	<li>brown: closed</li>
+	<li>no colour: local FPL (not yet published)</li>
+</ul>
+
+<h2>ATC phone lines</h2>
+
+<p>Phone icons:</p>
+<ul>
+	<li>flat vs. lifted: outgoing state (if teaching: line is between ATC and student)</li>
+	<li>no icon: no phone line to reach ATC by voice</li>
+</ul>
+
+<p>Icon backgrounds and flashing:</p>
+<ul>
+	<li>yellow, flashing: placed call</li>
+	<li>yellow, still: call ended (by them) or on hold (&quot;still outgoing&quot;)</li>
+	<li>orange, flashing: incoming call</li>
+	<li>orange, still: call ended (by us) or on hold (&quot;still incoming&quot;)</li>
+	<li>green, circled: call in progress</li>
+	<li>no background: idle phone line</li>
+</ul>
+
+<h2>Text radio messages</h2>
+
+<p>Bracketed prefixes:</p>
+<ul>
+	<li>solo sessions (when voice instructions turned on): &quot;M&quot; = instruction given by mouse; &quot;V&quot; = recognised voice instruction</li>
+	<li>teaching sessions: &quot;R&quot; = readback monitor message from simulated aircraft, not visible to student (click to recall and send)</li>
+	<li>playback sessions: &quot;T&quot; = text message; &quot;V&quot; = voice message (with or without transcript); none = other recorded event (using message history as event log)</li>
+</ul>
+
+</body>
+</html>

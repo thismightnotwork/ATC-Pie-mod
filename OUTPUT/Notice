@@ -1,0 +1,18 @@
+
+== OUTPUT ==
+
+ATC-pie dumps various log and output files here, possibly overwritten regularly.
+
+For example, when required data is missing for an airfield or no world-wide list
+of AD positions is provided, ATC-pie falls back on extracting old data from a
+deprecated source and saves it here with a ".extract" extension for quicker
+access in later runs.
+
+If you customise extracted files found here, rename/move them where appropriate
+to avoid losing your work when this directory is cleared (e.g. on clean-up):
+ - see "CONFIG/ad" for individual airport specs (named by ICAO code + ".dat");
+ - see "CONFIG/nav" for world locations and names ("AD-positions").
+
+It is safe to delete files here once all sessions are finished, which you can do
+with the clean-up script, but the directory itself should not be deleted.
+

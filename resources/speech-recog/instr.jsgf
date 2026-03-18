@@ -1,0 +1,223 @@
+#JSGF V1.0;
+
+grammar instruction;
+
+public <start> = <callsign> [roger | negative | correction | <greeting_hello>] <instr> [([and] <instr>)+];
+// WARNING: The current implementation of sr.py assumes the callsign is the first thing in the string.
+
+<callsign> =
+  <airline_callsign> <flight_number>
+| <tail_number>
+;
+
+<flight_number> = [<two_digit_number> | [<digit_lazyOK>] <digit_lazyOK>] (<two_digit_number> | <digit_lazyOK> <digit>);
+
+<tail_number> = <alphanum> <alphanum>+;
+
+// <airline_callsign> rule appended to this file by program
+
+
+/******  INSTRUCTIONS  ******/
+
+<instr> =  // Missing instructions: FOLLOW_ROUTE, INTERCEPT_NAV, TAXI, DEP_CLEARANCE
+  <vector_instr>                   // VECTOR_HDG, VECTOR_ALT, VECTOR_SPD
+| <runway_instr>                   // LINE_UP, CLEARED_LDG, CLEARED_TKOF
+| <approach_instr>                 // EXPECT_SFC, INTERCEPT_LOC, CLEARED_APP
+| speed your discretion            // CANCEL_SPD
+| hold position                    // HOLD_POSITION
+| cancel approach | go-around      // CANCEL_APP
+| proceed [direct] [to] <navpoint> // VECTOR_DCT
+| hold [at] <navpoint>             // HOLD_AT_FIX
+| squawk <octal_digit> <octal_digit> <octal_digit> <octal_digit> // SQUAWK
+| contact <atc_position> [<greeting_bye>] // HAND_OVER
+| say intentions                   // SAY_INTENTIONS
+;
+
+<atc_position> = ramp | ground | tower | departure | approach | centre | radar;
+
+<greeting_hello> = hello | good-morning | good-afternoon | good-evening;
+<greeting_bye> = bye | bye-bye | good-bye | good-day | so-long;
+
+<navpoint> = <alphanum>+ | <named_navpoint>;
+
+// <named_navpoint> rule appended to this file by program (depends on speech recog. CONFIG)
+
+
+
+/*  Vectoring  */
+
+<vector_instr> =
+  turn [left | right] [heading] <heading>
+| [fly | maintain] heading <heading>
+| (climb | descend) [to | and maintain] <fl_alt>
+| (cleared to | maintain) <fl_alt>
+| [reduce | increase | maintain] speed <num_10to999_lazyOK> [knots]
+;
+
+<heading> = <digit> <digit> <digit> [degrees];
+
+<fl_alt> =
+  flight-level <num_10to999_lazyOK>
+| [altitude] (<alt_thousand> [<alt_hundred>] | <alt_hundred>) [feet]
+;
+
+<alt_thousand> = <num_1to99_dblOK> thousand;
+
+<alt_hundred> = <digit_no0> hundred;
+
+
+
+/*  Runway use  */
+
+<runway_instr> =
+  <tkof_ldg_clearance> [<wind_info>]
+| <wind_info> <tkof_ldg_clearance>
+| line-up and wait [<named_runway>]
+| line-up <named_runway> and wait
+| <named_runway> line-up and wait
+;
+
+<tkof_ldg_clearance> =
+  (<clrd_tkof> | <clrd_ldg>) [<named_runway>]
+| [line-up] <named_runway> <clrd_tkof>
+| <named_runway> <clrd_ldg>
+;
+
+<clrd_tkof> = (clear | cleared) for take-off;
+<clrd_ldg> = (clear | cleared) to land;
+
+<named_runway> =
+  runway (<digit> [<digit>] | <two_digit_number>) [left | right | centre]
+| (<digit> <digit> | <two_digit_number>) (left | right | centre)
+| helipad (<alphanum>+ | <two_digit_number>)
+;
+
+<wind_info> =
+  (wind | winds) (<heading> | variable) (at <num_1to99_dblOK> [knots] | <num_1to99_dblOK> knots) [(gusting | gust | gusts) <num_1to99_dblOK> [knots]]
+| (wind | winds) calm
+;
+
+
+
+/*  Approaches  */
+
+<approach_instr> =
+  expect [<possibly_typed_approach> [for]] <named_runway>
+| <approach_clearance> [[for] <named_runway>]
+| <named_runway> <approach_clearance>
+;
+
+<approach_clearance> =
+  intercept [the] localiser
+| cleared [for] <possibly_typed_approach>
+| make (straight-in [approach] | approach [straight-in])
+;
+
+<possibly_typed_approach> =
+  approach
+| ils [approach]
+| visual [approach]
+| straight-in [approach]
+;
+
+
+/******  ALL-PURPOSE  ******/
+
+<num_1to99_dblOK> =
+  <digit>
+| <num_10to99_dblOK>
+;
+
+<num_10to99_dblOK> =
+  <two_digit_number>
+| <digit_no0> <digit> [<two_digit_number>]
+;
+
+<num_10to999_lazyOK> =
+  <num_10to99_dblOK>
+| zero <digit_no0> <digit>
+| <digit_no0> <digit_lazyOK> <digit>
+| <digit_no0> <two_digit_number> // lazy three digits
+;
+
+
+<two_digit_number> =
+  ten
+| eleven
+| twelve
+| thirteen
+| fourteen
+| fifteen
+| sixteen
+| seventeen
+| eighteen
+| nineteen
+| twenty [<digit_no0>]
+| thirty [<digit_no0>]
+| forty [<digit_no0>]
+| fifty [<digit_no0>]
+| sixty [<digit_no0>]
+| seventy [<digit_no0>]
+| eighty [<digit_no0>]
+| ninety [<digit_no0>]
+;
+
+
+<digit> = zero | <digit_no0>;
+
+<digit_lazyOK> = o | <digit>;
+
+<alphanum> = <digit> | <letter>;
+
+<digit_no0> =
+  one
+| two
+| tree | three
+| four
+| fife | five
+| six
+| seven
+| eight
+| niner | nine
+;
+
+<octal_digit> =
+  zero
+| one
+| two
+| tree | three
+| four
+| fife | five
+| six
+| seven
+;
+
+<letter> =
+  alpha
+| bravo
+| charlie
+| delta
+| echo
+| foxtrot | fox
+| golf
+| hotel
+| india
+| juliet
+| kilo
+| lima
+| mike
+| november
+| oscar
+| papa
+| quebec
+| romeo
+| sierra
+| tango
+| uniform
+| victor
+| whiskey
+| x-ray
+| yankee
+| zulu
+;
+

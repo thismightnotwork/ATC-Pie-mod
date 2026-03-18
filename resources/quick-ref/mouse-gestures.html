@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+	<meta name="qrichtext" content="1" />
+	<style type="text/css">p, li { white-space: pre-wrap; }</style>
+</head>
+
+<body>
+
+<h1>Mouse gestures</h1>
+
+<h2>Hover</h2>
+<ul>
+	<li>strip: show comment in tool tip</li>
+	<li>radar scope: show selection-to-mouse info</li>
+	<li>unpinned navpoints and elements on the radar scope: show short name, and frequency/channel if navaid</li>
+	<li>entry in navigator or ATC list: show a tool tip with true heading and distance from radar centre</li>
+</ul>
+
+<h2>Click</h2>
+
+<p>Left button:</p>
+<ul>
+	<li>on strip, FPL, radar target or radar tag: select</li>
+	<li>on radar scope background: deselect</li>
+	<li>on radar navpoint:
+		<ul type="circle">
+			<li>plain click: fill navigator filter and instruction navpoint fields</li>
+			<li>with SHIFT if selection contains a strip with a recognised route: add/remove enroute waypoint</li>
+			<li>with ALT: send &quot;proceed direct&quot; instruction through CPDLC to selected callsign (&quot;request direct&quot; if teaching)</li>
+		</ul>
+	</li>
+	<li>on text radio message:
+		<ul type="circle">
+			<li>own message: recall addressee and message in entry line</li>
+			<li>any ACFT message in teacher sessions: recall sender and message</li>
+			<li>other: recall addressee and focus message field</li>
+		</ul>
+	</li>
+	<li>on &quot;OK&quot; button in instruction panel, with ALT: send instruction through CPDLC (or request if teaching)</li>
+</ul>
+
+<p>Middle button:</p>
+<ul>
+	<li>on strip, FPL, radar target or radar tag: link to current selection if any and possible</li>
+	<li>with SHIFT on strip, FPL, radar target or radar tag (if selected and linked): unlink from rest of selection</li>
+</ul>
+
+<h2>Double-click</h2>
+
+<p>No modifiers:</p>
+<ul>
+	<li>on strip: open strip detail sheet</li>
+	<li>on radar target or tag: open linked strip if any</li>
+	<li>on rack, under strips: create new strip on rack</li>
+	<li>on loose strip bay background: create new strip in bay</li>
+	<li>on empty RWY box: start/reset separation timer</li>
+	<li>on rack column title: edit/delete rack</li>
+	<li>on radar navpoint: pin/unpin label</li>
+	<li>on navigator entry: indicate point on radar screen</li>
+	<li>on notification: notification-dependant</li>
+	<li>on ATC callsign: raise private text channel</li>
+	<li>on ATC phone line icon: switch outgoing status
+		<ul type="circle">
+			<li>if &quot;idle&quot;: place call</li>
+			<li>if outgoing or call in progress: hang up (drop line)</li>
+			<li>if incoming: answer call</li>
+		</ul>
+	</li>
+	<li>in status bar:
+		<ul type="circle">
+			<li>RDF label: show last detected signal info</li>
+			<li>METAR, wind or QNH label: raise weather dock</li>
+			<li>timer icon: open timers table</li>
+		</ul>
+	</li>
+</ul>
+
+<p>With SHIFT:</p>
+<ul>
+	<li>on strip: indicate linked ACFT or XPDR identification</li>
+	<li>on ATC callsign: indicate position if known</li>
+	<li>on radar target: remove hdg/alt./FL/speed assignments</li>
+	<li>on radar tag: reset text box position</li>
+	<li>on radar scope background: add custom text label (annotate radar)</li>
+	<li>on custom text label: remove label</li>
+</ul>
+
+<p>With ALT:</p>
+<ul>
+	<li>on strip, radar target or radar tag: open current/last CPDLC window for callsign</li>
+</ul>
+
+<h2>Click &amp; drag</h2>
+
+<p>Left button:</p>
+<ul>
+	<li>strip:
+		<ul type="circle">
+			<li>within/between racks, loose bays or runway boxes: rerack/reorder/reposition flight strip</li>
+			<li>drag loose strip with SHIFT: move and keep within bay, pushing edges as needed</li>
+			<li>drop on shelf: shelve strip, e.g. releasing a contact with no handover</li>
+			<li>drop on ATC callsign, without ALT: send strip to ATC</li>
+			<li>drop on ATC callsign, with ALT and active data link: data authority transfer or handover instruction (as teacher: request handover)</li>
+		</ul>
+	</li>
+	<li>radar tag:
+		<ul type="circle">
+			<li>without SHIFT: move linked strip (see above)</li>
+			<li>with SHIFT: move tag</li>
+		</ul>
+	</li>
+	<li>radar target: vector/instruct (*)
+		<ul type="circle">
+			<li>without SHIFT: assign heading or instruct taxi if detected on ground</li>
+			<li>with SHIFT, dragging vertically: assign alt./FL</li>
+			<li>with SHIFT, dragging horizontally: assign speed</li>
+		</ul>
+	</li>
+	<li>loose strip bay or radar scope background (unless locked): pan view</li>
+</ul>
+
+<p>Right button:</p>
+<ul>
+	<li>on radar scope
+		<ul type="circle">
+			<li>without SHIFT: quick heading and distance measuring tool + show ground elevation if available</li>
+			<li>with SHIFT as teacher: create new traffic</li>
+		</ul>
+	</li>
+	<li>in tower view window when not following an aircraft (FlightGear input): look around</li>
+</ul>
+
+<p>(*) Notes on click &amp; drag vectoring:</p>
+<ul>
+	<li>with ALT (except taxi): send instruction through CPDLC (or request if teaching)</li>
+	<li>press right button while dragging to abort</li>
+	<li>in solo sessions if voice recognition turned off: action instructs callsign</li>
+	<li>as teacher: all actions take direct control of aircraft (no strip callsign look-up)</li>
+</ul>
+
+</body>
+</html>
+

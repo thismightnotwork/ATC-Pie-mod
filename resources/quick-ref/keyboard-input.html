@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+	<meta name="qrichtext" content="1" />
+	<style type="text/css">p, li { white-space: pre-wrap; }</style>
+</head>
+
+<body>
+
+<h1>Keyboard and text input</h1>
+
+<h2>Action keys and shortcuts</h2>
+
+<p>Many shortcuts correspond to menu actions, likely referenced directly in the application menus. Others can be found in the list and tables below.</p>
+<ul>
+	<li>Ctrl: radio PTT key. Use in solo sessions for voice instructions when recognition is turned on, and in teacher/student sessions when integrated radio support is activated by teacher. In FlightGear and FSD sessions: acts on all radios with &quot;kbd PTT&quot; ticked.</li>
+	<li>Alt: CPDLC key. Combines with mouse actions like vectoring, strip handover and instruction panel buttons (see &quot;Mouse gestures&quot; tab), as well as the ENTER key to open the current/latest connection window for selected callsign.</li>
+	<li>Single dot (&quot;.&quot;) in an airport input field: shortcut for base airfield. Fills the input with the current ICAO position (AD mode only).</li>
+	<li>Pause: Works in solo, teaching and playback sessions (pausable clock). FG and FSD sessions are tied to real time; student sessions tied to the teacher's clock.</li>
+</ul>
+
+<p>&nbsp;</p>
+<table>
+  <tr>
+    <th>&nbsp;</th>
+    <th>No Shift</th>
+    <th>With Shift</th>
+  </tr>
+  <tr>
+    <th>F1</th>
+    <td>Quick reference</td>
+    <td>Location information</td>
+  </tr>
+  <tr>
+    <th>F2</th>
+    <td>Create and open a new blank strip</td>
+    <td>+ link to selected FPL or radar contact</td>
+  </tr>
+  <tr>
+    <th>F3</th>
+    <td>Create and open a new flight plan</td>
+    <td>+ link to selected strip</td>
+  </tr>
+  <tr>
+    <th>F4</th>
+    <td>CPDLC panel</td>
+    <td>Close undockable windows</td>
+  </tr>
+  <tr>
+    <th>F5</th>
+    <td>New timer quick start</td>
+    <td>Show running timers</td>
+  </tr>
+  <tr>
+    <th>F6</th>
+    <td>Log radar measurements</td>
+    <td>Record session data</td>
+  </tr>
+  <tr>
+    <th>F7</th>
+    <td>Navigator dock</td>
+    <td>Open world airport browser</td>
+  </tr>
+  <tr>
+    <th>F8</th>
+    <td>ATC coordination dock</td>
+    <td>ATC text messaging dock</td>
+  </tr>
+  <tr>
+    <th>F9</th>
+    <td>Radar contact details dock</td>
+    <td>Flag/unflag selected radar contact</td>
+  </tr>
+  <tr>
+    <th>F10</th>
+    <td>Teacher's console</td>
+    <td>Skip 10 seconds forward (solo, teacher and playback sessions)</td>
+  </tr>
+  <tr>
+    <th>F11</th>
+    <td>General settings</td>
+    <td>Runway/helipad use</td>
+  </tr>
+  <tr>
+    <th>Alt+F11</th>
+    <td>Location settings</td>
+    <td>Solo simulation options</td>
+  </tr>
+  <tr>
+    <th>F12</th>
+    <td>Restore saved layout</td>
+    <td>Save main window dock layout &amp; geometry</td>
+  </tr>
+  <tr>
+    <th>Alt+F12</th>
+    <td>Reload background images</td>
+    <td>Reload FG aircraft models</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table>
+  <tr><th>&nbsp;</th><th>Alt+key</th></tr>
+  <tr><th>A</th><td>ATIS dialog</td></tr>
+  <tr><th>B</th><td>Runway boxes (raise dock)</td></tr>
+  <tr><th>C</th><td>Path/route conflict anticipation (toggle)</td></tr>
+  <tr><th>D</th><td>View/register departure clearance</td></tr>
+  <tr><th>E</th><td></td></tr>
+  <tr><th>F</th><td>Flight plans (raise dock)</td></tr>
+  <tr><th>G</th><td></td></tr>
+  <tr><th>H</th><td>Approach spacing hints (toggle)</td></tr>
+  <tr><th>I</th><td>Instructions (raise dock)</td></tr>
+  <tr><th>J</th><td></td></tr>
+  <tr><th>K</th><td></td></tr>
+  <tr><th>L</th><td>Notification log (raise dock)</td></tr>
+  <tr><th>M</th><td>Toggle Mach numbers on radar scopes</td></tr>
+  <tr><th>N</th><td>Notepads (raise dock)</td></tr>
+  <tr><th>O</th><td>Monitor runway occupation (toggle)</td></tr>
+  <tr><th>P</th><td>Primary radar (toggle)</td></tr>
+  <tr><th>Q</th><td>Quiet notifications (toggle)</td></tr>
+  <tr><th>R</th><td>Radios (raise dock)</td></tr>
+  <tr><th>S</th><td>Strips (raise dock)</td></tr>
+  <tr><th>T</th><td>Text radio messaging (raise dock)</td></tr>
+  <tr><th>U</th><td>Unit conversion tool</td></tr>
+  <tr><th>V</th><td>Tower view control panel (raise dock)</td></tr>
+  <tr><th>W</th><td>Weather (raise dock)</td></tr>
+  <tr><th>X</th><td>Transfer strip or data authority</td></tr>
+  <tr><th>Y</th><td>Playback timeline (raise dock)</td></tr>
+  <tr><th>Z</th><td>Recall sent/discarded strips (cheat)</td></tr>
+</table>
+<p>&nbsp;</p>
+
+<h2>Point specification</h2>
+
+<p>In various occasions, e.g. to position your CTR radar centre or draw radar background images, you will want to specify location points. To specify a point, you may either:</p>
+<ul>
+	<li>write lat/lon Earth coordinates separated by a comma with no space, e.g. 35.8765,-90.567 or 48&deg;51'24''N,2&deg;21'03''E (you may replace the &deg;/'/'' symbols by d/m/s respectively to avoid encoding problems);</li>
+	<li>spell a navpoint code (VOR, airfield...);</li>
+	<li>prefix a navpoint code with a parenthesed type, e.g. &quot;(VOR)ABC&quot;, to disambiguate between navpoints with identical names, selecting by type (accepted types: AD, VOR, NDB, FIX, ILS, RNAV);</li>
+	<li>append an ICAO region filter to a navpoint code after &quot;@&quot;, e.g. &quot;ABC@LK&quot;;</li>
+	<li>use the &quot;namedpoint~refpoint&quot; syntax to choose between navpoints with identical names, selecting the closest to a reference point;</li>
+	<li>append a &quot;&gt;radial,distance&quot; suffix to any base point specification to move it by a distance in NM along a true radial (&quot;~&quot; has precedence over &quot;&gt;&quot;).</li>
+</ul>
+
+<p>For example:</p>
+<ul>
+	<li>48&deg;51'24''N,2&deg;21'03''E is the centre of Paris;</li>
+	<li>SULED&gt;180,1.5 is a point 1.5 NM due true South of navpoint SULED;</li>
+	<li>IA~KIAD is the point named IA that is nearest to KIAD (with a 200 NM map range from KPIT, you see two points "IA" so the name alone is ambiguous);</li>
+	<li>(NDB)MEN~(AD)LFMT is the NDB whose code is MEN that is the closest to the airfield whose code is LFMT.</li>
+</ul>
+
+</body>
+</html>
+
