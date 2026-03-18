@@ -1,0 +1,557 @@
+
+#
+# This file is part of the ATC-pie project,
+# an air traffic control simulation program.
+# 
+# Copyright (C) 2015  Michael Filhol <mickybadia@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+#
+
+
+=== r1 ===
+
+Release date: 1/02/2015
+Initial release.
+
+
+=== r2 ===
+
+Release date: 6/03/2015
+Major feature addition: Handovers
+Other notable changes:
+  - route parsing and next waypoint display
+  - quick reference
+  - save racks
+
+
+=== r3 ===
+
+Release date: 21/03/2015
+Major feature addition: Background images
+Other notable changes:
+  - custom navigation data
+  - configurable FGCom ports
+  - save window state and geometry
+  - separation rings
+
+
+=== r4 ===
+
+Release date: 21/05/2015
+Major feature addition: Solo training mode
+Other notable changes:
+  - windsocks
+  - FGCom server choice
+  - route on strip display
+  - strip colour for "!!vect"
+  - instruction panel
+  - saved RWY parameters
+  - BG image example
+  - speed info for a few ACFT types
+
+Update r4b
+
+Update r4c
+
+
+=== r5 ===
+
+Release date: 19/07/2015
+Major feature addition: Path conflict detection
+Other notable changes:
+  - route drawing
+  - SHIFT+click on navpoints for quick route editing
+  - customisable colours
+  - custom text aliases
+  - warn of protocol-lost text messages
+  - text labels in "DRAW" files
+  - radar signal pick-up floor option
+  - "kill ACFT" cheat
+
+Update r5b:
+  - check text alias replacements dialog
+
+
+=== r6 ===
+
+Release date: 16/08/2015
+Major feature addition: Tower viewing
+Other notable changes:
+  - multiple weather stations
+  - multiple radar screens
+  - discarded strip recall cheat
+  - spawn aircraft cheat
+  - multi-view packet forwarding
+  - ACFT type recognition and ICAO label on strips
+
+Update r6b
+
+Update r6c:
+  - code optimisation
+  - recognise airports, search and pick by name
+  - show non-editable strip details
+  - flight rules on strips
+  - a few more options (and more saved)
+  - small GUI changes, e.g. more compact radios
+  - allow changing FG root directory
+
+
+=== r7 ===
+
+Release date: 21/09/2015
+Major feature addition: Route viewer
+Other notable changes:
+  - text radio sender blacklist
+  - chat completer: match anywhere in messages + popup
+  - commercial callsigns generated in solo mode
+  - easy access to Earth coordinates
+  - strict ICAO designators option
+  - notification on emergency code squawks
+  - better FPL date filtering options
+
+Update r7b:
+  - configurable map and radar ranges
+  - route presets by dep+dest airports
+  - bg-img "point>radial,distance" spec
+  - non-SX entries in ATC list (strip drops disabled)
+  - "primary radar" option (no more an "OFF/STBY" cheat)
+  - support for METAR "MPS" wind unit
+
+
+=== r8 ===
+
+Release date: 18/01/2016
+Major feature addition: CTR mode
+Other notable changes:
+  - "!!route" warning
+  - new "follow route" instruction and AI capability
+  - tower icon in airport objects
+  - packaged FGCom binaries upgrade to version 3.7
+
+Update r8b:
+  - draw additional airports
+  - Lenny64 FPL management and session announcement use email+pwd
+
+Update r8c:
+  - alarm clocks (custom timers)
+  - reload bg-img & route presets
+
+Update r8d
+
+
+=== r9 ===
+
+Release date: 8/05/2016
+Major feature addition: Tutorial sessions (connect teacher & student)
+Other notable changes:
+  - download OpenStreetMap images for radar background
+  - holding instructions in solo sessions
+  - wake turbulence category detail
+  - lose contacts after invisible radar blip count (not timeout)
+
+
+=== r10 ===
+
+Release date: 10/07/2016
+Major feature addition: Ground control (taxiways, parking, instructions...)
+Other notable changes:
+  - X-plane data update
+  - individual aircraft freeze by teacher
+  - randomise weather in solo sessions
+  - wind affects AI aircraft
+  - controllable strip auto-fill options
+  - rack colours on tabs
+  - sequence numbers on racks
+  - custom airport spec vs. X-plane extract distinction
+  - reload colour configuration file
+
+Update r10b:
+  - teacher keeps strips on handovers
+
+Update r10c:
+  - "navpoint~refpoint" syntax for point specs
+
+Update r10d
+
+Update r10e:
+  - better final approach guides
+  - configurable AMSL offset
+
+Update r10f:
+  - X-plane navaid & fix data update
+  - WTC in radar tags
+
+Update r10g:
+  - pretty strips for all platforms
+  - sector file data extracting script
+
+Update r10h:
+  - auto-remove strip assignments with instructions
+  - sector file extraction script reads from SID/STAR/ARTCC sections
+
+
+=== 0.9 ===
+
+Version 0.9.1 release date: 26/09/2016
+Major feature addition: Loose strip bays and column rack views
+Other notable changes:
+  - editable ACFT data base
+  - open/close FPLs
+  - airline livery configuration for AI traffic rendering
+  - mode S radar identification
+  - draw airport lines (X-plane "linear features")
+  - WTC auto-fill button on detail sheets
+  - manual control of saved radar pinned points and labels
+  - preset text radio messages saved in separate file
+
+Update 0.9.2:
+  - position history trace instead of speed line
+  - configurable course/hdg line fly time
+  - FPL online updates reflected locally
+  - +/- buttons in loose strip bays
+
+Update 0.9.3
+
+
+=== 1.0 ===
+
+Version 1.0.1 release date: 6/12/2016
+Major feature addition: runway boxes with automatic timers
+Other notable changes:
+  - GUI launcher & change location
+  - relative wind direction in runway use selection dialog
+  - more system & tower options from settings dialog box
+
+Update 1.0.2:
+  - avoid opposite runways in RWY use dialog
+  - sync RWY label visibility with runway use selection
+
+
+=== 1.1 ===
+
+Version 1.1.0 release date: 15/01/2017
+Major feature addition: runway occupation/incursion detection
+Other notable changes:
+  - strip shelf (shelve vs. delete actions)
+  - toolbars and icons
+  - dock flash option
+  - additional viewers file
+  - RWY parameters for accepted ACFT categories
+
+Update 1.1.1:
+  - XPDR ground mode in tutorial sessions
+
+Update 1.1.2:
+  - ground elevation maps
+
+Update 1.1.3:
+  - save/restore window docks layout
+  - tower viewpoint selection
+  - $rwy alias
+  - FGMS XPDR mode guess option
+
+
+=== 1.2 ===
+
+Version 1.2.0 release date: 17/05/2017
+Major feature addition: voice instruction recognition
+Other notable changes:
+  - indicated air speeds
+  - FPL match button in strip detail sheet
+  - keyboard PTT indicator in status bar
+  - configurable solo weather change interval
+  - tower view: bank angle in turns
+  - runway details in env. information
+  - divided table width strip view
+  - location first time splash and data check
+
+
+=== 1.3 ===
+
+Version 1.3.0 release date: 25/06/2017
+Major feature addition: FGMS v1.1.2 + new XPDR properties (GND & IAS)
+Other notable changes:
+  - speech synthesis for pilot read-back in solo
+  - approach spacing hints
+  - collecting racks for received strips
+  - "speed your discretion" instruction
+  - radar mode S capability toggle
+  - radar GND mode filter toggle
+  - FPL link options on unlinked strip detail sheet
+  - strip "!!vect/route" toggle option
+  - text alias for strip cruise level
+  - traffic selection and finer granularity in path conflict anticipation
+  - tower view: nose lift-off on departure
+  - mark frozen aircraft on teacher radar
+  - silenced session start (3-second sound lock)
+  - save sound notification selection
+  - pretty printing of XML settings
+
+Update 1.3.1:
+  - SSR mode capability selection
+  - taxiing AI aircraft stop to avoid collisions
+  - teacher can create taxiing aircraft
+  - initial solo strips linked to radar contacts
+  - strip count and more runway details in env. info dialog
+  - "!!ident" and individual cheat/comment indicators in radar tags
+  - octal XPDR code spin boxes
+  - X-plane nav data update (data cycle 201703)
+
+Update 1.3.2:
+  - teacher aircraft squat
+
+Update 1.3.3:
+  - per-radar GND mode filter
+
+Update 1.3.4:
+  - FG aircraft directory setting for internal tower view
+  - menu access to X-plane airport gateway
+  - X-plane nav data update (data cycle 201708)
+
+
+=== 1.4 ===
+
+Version 1.4.0 release date: 5/10/2017
+Major feature addition: multiple-window workspace and state save
+Other notable changes:
+  - per-view rack display
+  - radar pan & zoom lock
+  - ILS/LOC info sourced from data
+  - distractor traffic in solo sessions
+  - condensed selection info toolbar
+  - runway boxes in separate dock
+  - radar colours for XPDR ranges
+  - auto-link options for identified received strips
+  - option to turn off SSR capability
+  - option to log measured coordinates to console
+
+Update 1.4.1:
+  - compact radar tags
+  - quicker startup
+  - location-specific radar settings
+  - integrated sector file extraction tool
+  - separate files for extracted/custom world AD data
+
+Update 1.4.2:
+  - TTS library change to pyttsx3
+
+Update 1.4.3:
+  - text radio history time limit and clear option
+  - OpenRadar handover range setting
+  - abort mouse instructions with RMB
+
+
+=== 1.5 ===
+
+Version 1.5.0 release date: 5/06/2018
+Major feature addition: ATC text messaging system
+Other notable changes:
+  - unlinked strip handover with other ATC-pie clients
+  - "who has" requests and rack privacy
+  - strip auto-print from filed FPLs
+  - "!!dup" warning on strips
+  - OpenStreetMap tile download replaced with link to website
+  - editable recognition of FG ATC models
+
+Update 1.5.1:
+  - revert FPL local changes
+  - unit conversion tool
+  - editable tail number formats
+
+Update 1.5.2:
+  - world airport browser
+  - radio direction finding (RDF)
+  - interpret transponder FL values
+  - radar assistance toolbar
+
+Update 1.5.3
+
+
+=== 1.6 ===
+
+Version 1.6.0 release date: 31/03/2019
+Major feature addition: controller-pilot data link communication (CPDLC)
+Other notable changes:
+  - RDF in FlightGear sessions
+  - AWY data and route suggestion
+  - AD entry/exit point specification
+  - extended teaching console (ACFT touch-and-go, visibility, clouds...)
+  - radar tag line order option
+  - VFR/IFR strip border indication
+  - cheated radar contact tag border indication
+  - AD drawing: TWY holding and centre lines, less TWY labelling clutter
+  - last QDM in RDF status bar label
+  - transition altitude sourced from apt.dat when present
+  - per-model height offset for AI/teacher traffic
+
+Update 1.6.1:
+  - CPDLC "REQUEST" messages
+  - RDF frequency selection in radio boxes
+
+Update 1.6.2:
+  - CPDLC status integration to strips
+  - custom ATIS appendix template per AD location
+  - text aliases $atis and $vis
+  - RWY excursion option on teacher ACFT touch-down
+  - free path for FGCom executable
+  - type disambiguation in point specification strings
+
+Update 1.6.3:
+  - speed format and WTC position options in radar tags
+  - rack sequence numbers on radar screen option
+  - flag radar contact (manual colour highlight)
+  - show ACFT cheat toggles menu option
+  - X-plane 11 nav data format compatibility
+  - grouped custom/editable data and settings into single directory
+  - region disambiguation in point specification strings
+  - nav data error log file
+  - customisable Qt stylesheet for session window
+
+Update 1.6.4
+
+Update 1.6.5:
+  - RWY separation timer reset
+  - strip lower border toggle
+  - radar tag WTC not shown option
+
+Update 1.6.6
+
+Update 1.6.7
+
+Update 1.6.8
+
+
+=== 1.7 ===
+
+Version 1.7.0 release date: 10/06/2020
+Major feature addition: FSD session type
+Other notable changes:
+  - accept/reject CPDLC transfers
+  - view last/current CPDLC dialogue
+  - clear terminated CPDLC dialogues from history
+  - view last recorded ATIS
+  - next ATIS alarm clock
+  - helipads and more strip statistics in env. info dialog
+  - read new 8.33 channel specs from apt.dat files
+  - unpackaged FGCom binaries
+
+Update 1.7.1
+  - FGCom-mumble integration
+  - docked panel instructions through CPDLC
+
+
+=== 1.8 ===
+
+Version 1.8.0 release date: 17/01/2021
+Major feature addition: ATC phone lines
+Other notable changes:
+  - CPDLC open to FlightGear sessions
+  - manual CPDLC message elements
+  - buffers for multi-line CPDLC messages
+  - ALT modifier key for CPDLC actions
+  - send strips on accepted CPDLC transfers
+  - AI ACFT right/left turns
+  - simplified keyboard shortcuts
+
+Update 1.8.1
+  - radar screen rotation
+
+Update 1.8.2
+
+Update 1.8.3
+  - forward time skip in solo and tutoring sessions
+  - custom tuning for image positioning helper tool
+  - phone line squelch adjustment tool
+  - replaced FG session announcement dialog with link to website
+  - renamed bg image directory and removed KSFO example
+
+Update 1.8.4
+  - changed "ini" extensions to "conf"
+
+Update 1.8.5
+  - integrated PyAudio phone/radio system in teaching/student sessions
+  - virtual online flight plan system in teaching/student sessions
+  - menu action for run-time reload of FlightGear ACFT models
+  - horizontal FG model offsets for generated aircraft (latoffset/fwdoffset)
+
+Update 1.8.6
+  - radar sweeping display option
+  - Mach numbers
+  - "!!dup" warning on strip detail sheet
+  - FPL link mark on strips
+  - world map in airport search dialogs
+  - sequence optimisation suggestions in approach hints
+  - line labels in text drawings
+  - removed options: legacy FGMS, FG IRC server/port
+
+Update 1.8.7
+  - Python 3.10 compatibility
+  - departure clearances
+  - automatic COMU-9 option
+  - open selected strip action and shortcut
+  - FGCom-mumble radio in FSD sessions (incl. RDF)
+  - CPDLC in FSD sessions (through Hoppie's ACARS network)
+  - full CPDLC message element set (ICAO doc. 4444)
+  - magnetic declination as local setting (NOAA service discontinued)
+
+Update 1.8.8
+  - per-session FGCom port setting in FSD
+
+
+=== 1.9 ===
+
+Version 1.9.0 release date: 16/03/2025
+Major feature addition: helicopter approaches and instructions
+Other notable changes:
+  - helipad use & parameters
+  - unlimited XPDR assignment ranges
+  - known ACFT types
+  - received strip auto-link to FPL
+  - solo MISAP probability
+  - toggle Mach numbers keyboard action
+  - improved ATIS action & dialog
+  - CPDLC panel collects connection windows
+  - dockable CPDLC panel and teaching console
+  - single central panel selection
+  - name radar & strip panel windows
+  - close non-dockable windows action
+  - read apt.dat v12 format
+  - extended ACFT DB
+
+Update 1.9.1
+
+Update 1.9.2
+  - drag linked strip from radar tag
+  - generic strip/CPDLC transfer action
+  - "+" on teacher strips never transferred to student
+  - distributed system settings dialogs
+  - FGCom-mumble as optional subsystem for FG sessions
+  - simplified teacher/student ATC coord. list
+  - removed historic FGCom support (discontinued in FG)
+  - removed PyMumble dependency for FG/FSD phones
+
+
+=== 1.10 ===
+
+Version 1.10.0 release date: 15/03/2026
+Major feature addition: session recording and playback
+Other notable changes:
+  - full radar history trace toggle for selected ACFT
+  - turn to RDF button in TWR view control panel
+  - strip link prompt on unlinked radar tag double click
+  - unlimited timers and custom timeout messages
+  - custom viewpoint setup from interface
+  - version check between teacher and student

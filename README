@@ -1,0 +1,199 @@
+
+#
+# This file is part of the ATC-pie project,
+# an air traffic control simulation program.
+# 
+# Copyright (C) 2015  Michael Filhol <mickybadia@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+#
+
+
+
+===================
+  PROGRAM LICENCE
+===================
+
+ATC-pie comes under version 3 of the GNU General Public Licence, whose terms are
+provided in the file named "COPYING" in this directory.
+
+
+
+==============
+  INSTALLING
+==============
+
+ATC-pie depends on two major software dependencies, required for it to run:
+ - Python (>=3.6)
+ - PyQt5 (>=5.4)
+
+Further libraries can optionally be installed to enable the features below. The
+program will run without them, only those features disabled. They can always be
+installed at a later time:
+ - for CPDLC and full ATC coordination in FlightGear sessions: the IRC library;
+ - for ATC phone lines, and for radio in teaching sessions: PyAudio (>=0.2.11);
+ - for voice instructions in solo sessions: PyAudio and PocketSphinx (>=0.1.3);
+ - for synthesis of pilot read-back in solo sessions: pyttsx3.
+
+For 3D viewing of the airfield (any AD session type), a FlightGear client must
+be available, either:
+ - installed on the same host, with the appropriate scenery and aircraft models;
+ - or running on an accessible host, started with the appropriate options.
+
+For an integrated radio system in FlightGear and FSD sessions, the FGCom-mumble
+plug-in must be run in a Mumble client externally (see link below for download).
+
+
+
+*** Linux ***
+
+This section refers to "packages" and "libraries" to install. The commands given
+assume the APT package management system and pip3 for Python libraries.
+
+Ensuring the required packages:
+  sudo apt-get install python3
+  sudo apt-get install python3-pyqt5
+  sudo apt-get install python3-pyqt5.qtmultimedia
+  sudo apt-get install libqt5multimedia5-plugins
+
+Recommended for FlightGear sessions (useless in other session types):
+  pip3 install irc
+
+Necessary for phone lines, for voice instruction recognition in solo sessions
+and for integrated radio in teacher/student sessions:
+  sudo apt-get install portaudio19-dev
+  sudo apt-get install swig
+  sudo apt-get install libpulse-dev
+  pip3 install pyaudio
+
+Voice instruction (solo sessions) recognition requires one more library:
+  pip3 install PocketSphinx
+
+Necessary only for pilot readback in solo sessions:
+  pip3 install pyttsx3
+
+
+*** Windows ***
+
+To get both Python3 and PyQt5 dependencies working at once, a trick is to
+install a WinPython+Qt5 package, downloadable from:
+  https://sourceforge.net/projects/winpython/
+
+Once the ATC-pie files are downloaded/extracted:
+ 1. right click on the "ATC-pie.py" file icon and "create a shortcut";
+ 2. right click on the new shortcut icon and open the properties dialog;
+ 3. in the "target" field, add "cmd /k " before the file path already present
+    (mind the TWO spaces in the added prefix);
+ 4. the "start in" field must contain the path to the ATC-pie directory;
+ 5. accept the dialog.
+
+If your .py files are correctly associated with Python3 (cf. "Open with"), a
+double click on the created shortcut should start the program. You may move the
+shortcut out of the ATC-pie directory, e.g. to your desktop or the "start" menu.
+
+
+*** Mac ***
+
+Use the official download links below, and have a look at the following forum
+thread: http://forum.flightgear.org/viewtopic.php?f=83&t=25416&p=251892#p251884
+
+
+
+===============
+  CUSTOMISING
+===============
+
+Many configuration options can be managed from the application itself, via menus
+and dialogs. For more advanced customisation, read the "CONFIG/Notice" file.
+
+
+
+=================================
+  SCRIPTS IN THE ROOT DIRECTORY
+=================================
+
+*** ATC-pie.py ***
+
+The one you most want to run. See the installation guide for help and options
+(link in the resource section below).
+
+
+*** cleanUp.sh ***
+
+ATC-pie generates log and cache files, which are safe to remove if you want to
+clear up space. Run this script with no argument to do so. It will neither
+break the ATC-pie start-up nor alter any personal setting.
+
+
+*** mkElevMap.py ***
+
+This is a convenient script to generate an elevation map for an area, typically
+around an airport for more accurate rendering of AI traffic in solo and teaching
+sessions. It uses the "fgelev" tool, which comes with FlightGear.
+
+Usage: mkElevMap.py <nw> <se> <prec_metres> [-- <fgelev_cmd>]
+
+Replace <nw> and <se> with the cordinates of the North-West and South-East
+corners of the area you want to cover with your map (it should cover all airport
+taxiways and runways). Argument <prec_metres> is the minimum precision you want
+to generate the map with, in metres between the plotted points. The flatter your
+field is, the larger this value can be. You may provide a full path to the
+"fgelev" executable (last argument <fgelev_cmd>), including options.
+
+The resulting map will be written to "OUTPUT/auto.elev", which you can rename
+and move to "CONFIG/elev" as appropriate. See "CONFIG/elev/Notice" for more
+details on the format and purpose of ground elevation maps.
+
+
+
+=============
+  RESOURCES
+=============
+
+*** General links ***
+
+Main project page: http://sourceforge.net/projects/atc-pie
+Project wiki page: http://wiki.flightgear.org/ATC-pie
+GNU GPLv3:         http://www.gnu.org/licenses/gpl-3.0.html
+
+
+*** Official download links for dependencies ***
+
+Python3:      https://www.python.org/downloads/
+PyQt5:        http://www.riverbankcomputing.com/software/pyqt/download5
+IRC library:  https://pypi.python.org/pypi/irc
+PyAudio:      https://pypi.python.org/pypi/PyAudio
+PocketSphinx: https://pypi.python.org/pypi/pocketsphinx
+pyttsx3:      https://pypi.python.org/pypi/pyttsx3
+FlightGear:   http://www.flightgear.org/download/
+Mumble:       https://www.mumble.info/
+FGCom-mumble: https://github.com/hbeni/fgcom-mumble/
+
+
+*** For info/help ***
+
+Installation:   http://wiki.flightgear.org/ATC-pie_installation_guide
+User guide:     http://wiki.flightgear.org/ATC-pie_user_guide
+FAQ:            http://wiki.flightgear.org/ATC-pie_FAQ
+Video tutorial: http://www.youtube.com/playlist?list=PL1EQKKHhDVJvvWpcX_BqeOIsmeW2A_8Yb
+Support forum:  http://forum.flightgear.org/viewforum.php?f=83
+
+
+*** Development sites and repositories (for developers and contributors) ***
+
+Dev wiki:    https://sourceforge.net/p/atc-pie/wiki
+Testers' ML: https://sourceforge.net/p/atc-pie/mailing-lists/atc-pie-testing
+Code mirror: https://gitlab.com/atc-pie/atc-pie
+
