@@ -290,13 +290,13 @@ class FsdConnection(QObject):
 		self.socket = None
 		self.strinbuf = ''
 
-	  def _vatsim_auth_response(self, challenge):
+     def _vatsim_auth_response(self, challenge):
     """Compute VATSIM MD5 challenge response."""
     key = VATSIM_CLIENT_KEY
     combined = challenge + key
     return hashlib.md5(combined.encode('ascii')).hexdigest()
 
-  def _send_id_packet(self, callsign, cid, server_callsign, initial_challenge):
+    def _send_id_packet(self, callsign, cid, server_callsign, initial_challenge):
     """Send $ID identification/auth packet."""
     response = self._vatsim_auth_response(initial_challenge)
     packet = '$ID{cs}:{svr}:{cid}:6:{ckey}:{sysuid}:{resp}\r\n'.format(
