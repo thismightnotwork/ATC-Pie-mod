@@ -42,6 +42,9 @@ from gui.launcher import ATCpieLauncher, valid_location_code, min_map_range, max
 
 from session.config import settings, app_icon_path, version_string
 
+# XU EG sector bootstrap (auto-installs IVAO XU EG nav data on first EG launch)
+from xu_eg_bootstrap import ensure_xu_eg_data
+
 
 # ---------- Constants ----------
 
@@ -90,6 +93,14 @@ if __name__ == "__main__":
 	except ValueError as err:
 		sys.exit('ERROR: %s' % err)
 	
+	# ---- XU EG Bootstrap -------------------------------------------------------
+	# If launching at an EG* location (or with no location yet specified, in case
+	# the user picks an EG airport from the launcher GUI), run the bootstrap once.
+	# It's a no-op after the first successful run (marker file guards it).
+	if location_arg is None or location_arg.upper().startswith('EG'):
+		ensure_xu_eg_data()
+	# ---------------------------------------------------------------------------
+
 	if not IRC_available:
 		print('IRC library not found; ATC coordination and CPDLC disabled in FlightGear sessions.')
 	if not pyaudio_available:
