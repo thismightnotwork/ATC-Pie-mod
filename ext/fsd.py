@@ -17,6 +17,8 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 
+import hashlib
+import os
 from sys import stderr
 from datetime import datetime, timedelta, timezone
 
@@ -50,14 +52,17 @@ speed_estimation_factor_onGround = .75
 min_height_for_airborne = 50  # ft
 allowed_FPL_DEP_time_delay = timedelta(hours=5)
 
-# VRC-style client identity, from your tcpdump / working main.py
-# $IDEGKK_TWR:SERVER:de1e:VRC 1.2.6:1:2:1:272337954:6eba0f94eae6e734ce3068d7b06772ed
+# VRC-style client identity used for $ID packet (matches your OpenFSD tcpdump)
 VRC_CLIENT_ID_HEX = "de1e"
 VRC_CLIENT_NAME = "VRC 1.2.6"
 VRC_NETWORK_ID = "1"
 VRC_SIM_TYPE = "2"
 VRC_UNIQUE_NUM = "272337954"
 VRC_TOKEN_HASH = "6eba0f94eae6e734ce3068d7b06772ed"
+
+# VATSIM/OpenFSD challenge-response auth key (public key used by OpenFSD auth)
+VATSIM_CLIENT_KEY = "9d5a7f32c3b04fe0"
+SYS_UID = str(int.from_bytes(os.urandom(4), 'big') & 0x7FFFFFFF)
 
 # -------------------------------
 
@@ -72,9 +77,11 @@ recv_prefixes_fmt = {
     '$AR': 4,
     '$CQ': 3,
     '$CR': 4,
+    '$DI': 4,   # server banner / initial challenge
     '$ER': 5,
     '$FP': 17,
     '$HO': 3,
+    '$ZC': 4,   # session challenge
     '%': 8,
     '@': 10,
 }
@@ -166,25 +173,15 @@ def freq_str(frq):
     return ''.join(c for c in str(frq)[1:] if c != '.')
 
 
-def send_vrc_style_id_packet(socket, callsign, rating_str):
+def _vatsim_auth_response(challenge, cid, password, client_key=VATSIM_CLIENT_KEY):
     """
-    Send $ID... packet that mimics VRC 1.2.6 on your OpenFSD,
-    identical pattern to main.py.
+    Compute the OpenFSD/VATSIM MD5 challenge response.
+    Algorithm: MD5( MD5(client_key + password) + challenge )
+    Returns lower-hex string.
     """
-    parts = [
-        "$ID" + callsign,
-        "SERVER",
-        VRC_CLIENT_ID_HEX,
-        VRC_CLIENT_NAME,
-        VRC_NETWORK_ID,
-        VRC_SIM_TYPE,
-        rating_str,
-        VRC_UNIQUE_NUM,
-        VRC_TOKEN_HASH,
-    ]
-    line = ":".join(parts) + "\r\n"
-    socket.write(line.encode("utf8"))
-    print("[CLI]", line.strip(), file=stderr)
+    inner = hashlib.md5((client_key + password).encode('utf-8')).hexdigest()
+    outer = hashlib.md5((inner + challenge).encode('utf-8')).hexdigest()
+    return outer
 
 
 class FsdAircraft(Aircraft):
@@ -268,6 +265,8 @@ class FsdConnection(QObject):
         QObject.__init__(self, parent)
         self.socket = None
         self.strinbuf = ''
+        self._callsign = ''
+        self._cid = ''
 
     def initOK(self):
         self.socket = QTcpSocket(self)
@@ -275,17 +274,20 @@ class FsdConnection(QObject):
         self.socket.readyRead.connect(self.receiveBytes)
         self.socket.connectToHost(settings.FSD_server_host, settings.FSD_server_port)
         if self.socket.waitForConnected(init_connection_timeout):
-            # Read $DI banner ($DISERVER:CLIENT:...) [FSD docs]
+            self._callsign = settings.my_callsign
+            self._cid = str(settings.FSD_cid)
+
+            # Read $DI banner or challenge from server
             self.socket.waitForReadyRead(init_connection_timeout)
             banner = bytes(self.socket.readAll()).decode('utf8', errors='ignore')
-            print("[SRV]", banner.strip(), file=stderr)
+            print('[SRV]', banner.strip(), file=stderr)
 
             rating_str = str(settings.FSD_rating)
 
-            # VRC-style $ID
-            send_vrc_style_id_packet(self.socket, settings.my_callsign, rating_str)
+            # Send VRC-style $ID packet
+            self._send_id_packet(rating_str)
 
-            # VRC-style #AA ATC login
+            # Send #AA ATC login
             self.sendLinePacket(
                 '#AA' + settings.my_callsign,
                 'SERVER',
@@ -295,9 +297,74 @@ class FsdConnection(QObject):
                 rating_str,
                 protocol_version
             )
+
+            # Handle any immediate $DI challenge in the banner
+            for line in banner.splitlines():
+                line = line.strip()
+                if line.startswith('$DI'):
+                    self._handle_di_challenge(line)
         else:
             self.socket = None
         return self.isConnected()
+
+    def _send_id_packet(self, rating_str):
+        """Send $ID packet in VRC 1.2.6 style."""
+        parts = [
+            '$ID' + self._callsign,
+            'SERVER',
+            VRC_CLIENT_ID_HEX,
+            VRC_CLIENT_NAME,
+            VRC_NETWORK_ID,
+            VRC_SIM_TYPE,
+            rating_str,
+            VRC_UNIQUE_NUM,
+            VRC_TOKEN_HASH,
+        ]
+        line = ':'.join(parts) + '\r\n'
+        self.socket.write(line.encode('utf8'))
+        print('[CLI]', line.strip(), file=stderr)
+
+    def _handle_di_challenge(self, fsd_line):
+        """
+        Handle $DI server-to-client initial challenge.
+        Format: $DISERVER:CLIENT:<version>:<challenge>
+        Respond with $ID containing auth response.
+        """
+        parts = fsd_line[len('$DI'):].split(':', maxsplit=3)
+        if len(parts) < 4:
+            return
+        challenge = parts[3].strip()
+        if not challenge:
+            return
+        response = _vatsim_auth_response(challenge, self._cid, settings.FSD_password)
+        resp_line = ':'.join([
+            '$ID' + self._callsign,
+            'SERVER',
+            VRC_CLIENT_ID_HEX,
+            response,
+        ]) + '\r\n'
+        self.socket.write(resp_line.encode('utf8'))
+        print('[CLI]', resp_line.strip(), file=stderr)
+
+    def _handle_zc_challenge(self, fields):
+        """
+        Handle $ZC session challenge (sent mid-session by server).
+        Format fields after prefix: [from, to, challenge]
+        Respond with $ZR.
+        """
+        if len(fields) < 3:
+            return
+        challenge = fields[2].strip()
+        if not challenge:
+            return
+        response = _vatsim_auth_response(challenge, self._cid, settings.FSD_password)
+        resp_line = ':'.join([
+            '$ZR' + self._callsign,
+            'SERVER',
+            response,
+        ]) + '\r\n'
+        self.socket.write(resp_line.encode('utf8'))
+        print('[CLI]', resp_line.strip(), file=stderr)
 
     def socketDisconnected(self):
         self.socket = None
@@ -327,7 +394,13 @@ class FsdConnection(QObject):
             try:
                 cmd, reqlen = next((prefix, nf) for prefix, nf in recv_prefixes_fmt.items()
                                    if fsd_line.startswith(prefix))
-                self.cmdReceived.emit(cmd, fsd_line[len(cmd):].split(':', maxsplit=(reqlen - 1)))
+                fields = fsd_line[len(cmd):].split(':', maxsplit=(reqlen - 1))
+                # Handle session challenge inline before emitting
+                if cmd == '$ZC':
+                    self._handle_zc_challenge(fields)
+                elif cmd == '$DI':
+                    self._handle_di_challenge(fsd_line)
+                self.cmdReceived.emit(cmd, fields)
             except StopIteration:
                 print('Unhandled packet:', fsd_line, file=stderr)
 
@@ -337,61 +410,96 @@ class FsdConnection(QObject):
         coords = env.radarPos()
 
         if settings.publicised_frequency is None:
-            freqs_field = "0"
+            freqs_field = '0'
         else:
             freqs_field = freq_str(settings.publicised_frequency)
 
-        facility_type = "3"
+        facility_type = '3'
         vis_range = str(settings.FSD_visibility_range)
         rating_str = str(settings.FSD_rating)
-        lat_str = "%f" % coords.lat
-        lon_str = "%f" % coords.lon
+        lat_str = '%f' % coords.lat
+        lon_str = '%f' % coords.lon
 
         self.sendLinePacket(
-            "%" + settings.my_callsign,
+            '%' + settings.my_callsign,
             freqs_field,
             facility_type,
             vis_range,
             rating_str,
             lat_str,
             lon_str,
-            "0",
+            '0',
         )
 
-    # --- METAR / TEXT basic implementations ---
+    # -------- Flight Plan --------
+
+    def sendFpl(self, fpl):
+        """Send a new flight plan to the server ($FP)."""
+        fields = FPL_16_fields(fpl)
+        self.sendLinePacket(
+            '$FP' + fields[0],        # callsign
+            'SERVER',
+            *fields[1:],
+            lastVerbatim=True
+        )
+
+    def sendFplAmendment(self, fpl):
+        """Send an amended flight plan ($AM)."""
+        fields = FPL_16_fields(fpl)
+        self.sendLinePacket(
+            '$AM' + settings.my_callsign,
+            fields[0],                 # callsign of the amended flight
+            *fields[1:],
+            lastVerbatim=True
+        )
+
+    # -------- Handover --------
+
+    def sendNonAtcPieHandover(self, recipient, callsign):
+        """Send a handover ($HO) for a callsign to another controller."""
+        self.sendLinePacket(
+            '$HO' + settings.my_callsign,
+            recipient,
+            callsign
+        )
+
+    # -------- Queries / Client Query --------
+
+    def sendQuery(self, requestee, query):
+        """Send a $CQ client query to requestee."""
+        self.sendLinePacket(
+            '$CQ' + settings.my_callsign,
+            requestee,
+            query
+        )
+
+    def sendQueryResponse(self, requester, query, response):
+        """Reply to a $CQ with $CR."""
+        self.sendLinePacket(
+            '$CR' + settings.my_callsign,
+            requester,
+            query,
+            response,
+            lastVerbatim=True
+        )
+
+    # -------- METAR / Text --------
 
     def sendMetarRequest(self, station):
         self.sendLinePacket(
-            "$AX" + settings.my_callsign,
-            "SERVER",
-            "METAR",
+            '$AX' + settings.my_callsign,
+            'SERVER',
+            'METAR',
             station
         )
 
     def sendTextMsg(self, msg, frq=None):
         if msg.isPrivate():
-            self.sendLinePacket("#TM" + msg.sender(), msg.recipient(),
+            self.sendLinePacket('#TM' + msg.sender(), msg.recipient(),
                                 msg.txtOnly(), lastVerbatim=True)
         elif frq is None:
-            self.sendLinePacket("#TM" + msg.sender(), "*A",
+            self.sendLinePacket('#TM' + msg.sender(), '*A',
                                 msg.txtOnly(), lastVerbatim=True)
         else:
-            self.sendLinePacket("#TM" + msg.sender(), "@" + freq_str(frq),
+            self.sendLinePacket('#TM' + msg.sender(), '@' + freq_str(frq),
                                 msg.txtMsg(), lastVerbatim=True)
-
-    # --- Keep other advanced packets disabled for now ---
-
-    def sendQuery(self, requestee, query):
-        return
-
-    def sendQueryResponse(self, requester, query, response):
-        return
-
-    def sendFpl(self, fpl):
-        return
-
-    def sendFplAmendment(self, fpl):
-        return
-
-    def sendNonAtcPieHandover(self, recipient, callsign):
-        return
